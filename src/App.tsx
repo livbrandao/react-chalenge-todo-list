@@ -63,12 +63,10 @@ export function App() {
       />
 
       <TaskList
-        tasks={tasks.filter((task) =>
-          task.text.toLowerCase().includes(filterText.toLowerCase())
-        )}
-        onEdit={editTask}
-        onToggle={toggleTaskCompletion}
+        tasks={tasks}
+        onEditTask={editTask}
         onRemove={removeTask}
+        onToggle={toggleTaskCompletion}
       />
     </div>
   );

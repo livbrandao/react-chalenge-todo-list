@@ -1,26 +1,72 @@
-import React from "react";
-import { TaskItem } from "./TaskItem";
+import React, { useState } from "react";
 
-type TaskListProps = {
-  tasks: { text: string; completed: boolean }[];
-  onEdit: (index: number, newText: string) => void;
-  onToggle: (index: number) => void;
-  onRemove: (index: number) => void;
+type Task = {
+  text: string;
+  completed: boolean;
 };
 
-export function TaskList({ tasks, onEdit, onToggle, onRemove }: TaskListProps) {
+interface TaskListProps {
+  tasks: Task[];
+  onEditTask: (index: number, newText: string) => void;
+  onRemove: (index: number) => void;
+  onToggle: (index: number) => void;
+}
+
+export const TaskList: React.FC<TaskListProps> = ({
+  tasks,
+  onEditTask,
+  onRemove,
+  onToggle,
+}) => {
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingText, setEditingText] = useState<string>("");
+
+  const startEditing = (index: number, text: string) => {
+    setEditingIndex(index);
+    setEditingText(text);
+  };
+
+  const saveEditing = () => {
+    if (editingIndex !== null) {
+      onEditTask(editingIndex, editingText);
+      setEditingIndex(null);
+      setEditingText("");
+    }
+  };
+
+  const cancelEditing = () => {
+    setEditingIndex(null);
+    setEditingText("");
+  };
+
   return (
     <ul>
       {tasks.map((task, index) => (
-        <TaskItem
-          key={index}
-          task={task}
-          index={index}
-          onEdit={onEdit}
-          onToggle={onToggle}
-          onRemove={onRemove}
-        />
+        <li key={index}>
+          {editingIndex === index ? (
+            <div>
+              <input
+                type="text"
+                value={editingText}
+                onChange={(e) => setEditingText(e.target.value)}
+              />
+              <button onClick={saveEditing}>Salvar</button>
+              <button onClick={cancelEditing}>Cancelar</button>
+            </div>
+          ) : (
+            <div>
+              <span>{task.text}</span>
+              <button onClick={() => startEditing(index, task.text)}>
+                Editar
+              </button>
+              <button onClick={() => onRemove(index)}>Remover</button>
+              <button onClick={() => onToggle(index)}>
+                {task.completed ? "Desmarcar" : "Concluir"}
+              </button>
+            </div>
+          )}
+        </li>
       ))}
     </ul>
   );
-}
+};
