@@ -3,6 +3,9 @@ import { filterTasks } from "./utils/filterTasks";
 import { markAllAsCompleted, deleteCompletedTasks } from "./utils/taskActions";
 import { Task } from "./types/Task";
 import { TaskList } from "./components/Tasks/TaskList";
+import { Filter } from "./components/Actions/Filter";
+import { ActionButtons } from "./components/Actions/ActionButtons";
+import { AddTask } from "./components/Tasks/Add.Task";
 
 export const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(() => {
@@ -61,77 +64,26 @@ export const App: React.FC = () => {
           Lista de Tarefas
         </h1>
 
-        <div className="mb-4 flex gap-2">
-          <input
-            type="text"
-            className="border rounded-lg w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Digite uma nova tarefa"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-          />
-          <button
-            className="w-1/2 bg-blue-500 text-white  rounded-lg hover:bg-blue-600"
-            onClick={addTask}
-          >
-            Adicionar Tarefa
-          </button>
-        </div>
+        <AddTask newTask={newTask} setNewTask={setNewTask} addTask={addTask} />
 
-        <div className="flex flex-col items-start  mb-2">
-          <div className="flex items-center w-full mb-1 gap-2">
-            <p className=" text-sm font-medium ">Filtrar por:</p>
+        <Filter
+          filterType={filterType}
+          filterText={filterText}
+          onFilterTypeChange={setFilterType}
+          onFilterTextChange={setFilterText}
+        />
 
-            <button
-              className="px-4 py-1 text-sm bg-gray-200 rounded-lg hover:bg-gray-300"
-              onClick={() => setFilterType("all")}
-            >
-              Todas
-            </button>
-            <button
-              className="px-4 py-1 text-sm bg-gray-200 rounded-lg hover:bg-gray-300"
-              onClick={() => setFilterType("completed")}
-            >
-              Concluídas
-            </button>
-            <button
-              className="px-4 py-1 text-sm bg-gray-200 rounded-lg hover:bg-gray-300 "
-              onClick={() => setFilterType("incomplete")}
-            >
-              Não concluídas
-            </button>
-          </div>
-          <input
-            type="text"
-            className="border rounded-lg w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Filtrar por texto"
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
-          />
-        </div>
+        <ActionButtons
+          onMarkAllAsCompleted={handleMarkAllAsCompleted}
+          onDeleteCompletedTasks={handleDeleteCompletedTasks}
+        />
 
-        <div className="">
-          <div className="mb-4 flex flex-row gap-4 justify-end w-full">
-            <button
-              className=" bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 "
-              onClick={handleMarkAllAsCompleted}
-            >
-              Marcar todas como concluídas
-            </button>
-            <button
-              className=" bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
-              onClick={handleDeleteCompletedTasks}
-            >
-              Excluir todas concluídas
-            </button>
-          </div>
-
-          <TaskList
-            tasks={filteredTasks}
-            onEditTask={editTask}
-            onRemove={removeTask}
-            onToggle={toggleTaskCompletion}
-          />
-        </div>
+        <TaskList
+          tasks={filteredTasks}
+          onEditTask={editTask}
+          onRemove={removeTask}
+          onToggle={toggleTaskCompletion}
+        />
       </div>
     </div>
   );
