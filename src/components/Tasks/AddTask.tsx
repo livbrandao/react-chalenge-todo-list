@@ -14,7 +14,7 @@ const AddTask: React.FC<AddTaskProps> = ({
   loading,
 }) => {
   return (
-    <div className="mb-4 flex gap-2">
+    <div className="mb-4 flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
       <input
         type="text"
         className="border rounded-lg w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -23,7 +23,7 @@ const AddTask: React.FC<AddTaskProps> = ({
         onChange={(e) => setNewTask(e.target.value)}
       />
       <button
-        className={`w-1/2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${
+        className={`py-1 md:py-2 w-full sm:w-1/2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${
           loading ? "opacity-50 cursor-not-allowed" : ""
         }`}
         onClick={addTask}

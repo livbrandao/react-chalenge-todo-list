@@ -11,7 +11,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   onDeleteCompletedTasks,
 }) => {
   return (
-    <div className="mb-4 flex flex-row gap-4 justify-end w-full">
+    <div className="mb-4 flex flex-row gap-4 md:justify-end md:w-full justify-between">
       <Button
         text="Marcar todas como concluídas"
         onClick={onMarkAllAsCompleted}

@@ -9,7 +9,7 @@ interface ButtonProps {
 export const Button: React.FC<ButtonProps> = ({ text, onClick, className }) => {
   return (
     <button
-      className={`px-4 py-2 rounded-lg text-white ${className}`}
+      className={`p-2 md:px-4 md:py-2 rounded-lg text-white text-xs md:text-sm ${className}`}
       onClick={onClick}
     >
       {text}

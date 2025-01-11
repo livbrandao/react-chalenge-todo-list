@@ -27,10 +27,12 @@ export const App: React.FC = () => {
   const addTask = async () => {
     if (newTask.trim() === "") return;
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setTasks([...tasks, { text: newTask.trim(), completed: false }]);
-    setNewTask("");
-    setLoading(false);
+    try {
+      setTasks([...tasks, { text: newTask.trim(), completed: false }]);
+      setNewTask("");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const editTask = async (index: number, newText: string) => {
@@ -72,7 +74,12 @@ export const App: React.FC = () => {
           Lista de Tarefas
         </h1>
 
-        <AddTask newTask={newTask} setNewTask={setNewTask} addTask={addTask} />
+        <AddTask
+          newTask={newTask}
+          setNewTask={setNewTask}
+          addTask={addTask}
+          loading={loading}
+        />
 
         <Filter
           filterType={filterType}
@@ -92,6 +99,7 @@ export const App: React.FC = () => {
             onEditTask={editTask}
             onRemove={removeTask}
             onToggle={toggleTaskCompletion}
+            loading={loading}
           />
         </React.Suspense>
       </div>

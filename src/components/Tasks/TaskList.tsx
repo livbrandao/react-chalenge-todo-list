@@ -11,6 +11,7 @@ interface TaskListProps {
   onEditTask: (index: number, newText: string) => void;
   onRemove: (index: number) => void;
   onToggle: (index: number) => void;
+  loading: boolean;
 }
 
 const TaskList: React.FC<TaskListProps> = ({
@@ -18,6 +19,7 @@ const TaskList: React.FC<TaskListProps> = ({
   onEditTask,
   onRemove,
   onToggle,
+  loading,
 }) => {
   return (
     <ul className="mt-10">
@@ -29,6 +31,7 @@ const TaskList: React.FC<TaskListProps> = ({
           onEditTask={onEditTask}
           onRemove={onRemove}
           onToggle={onToggle}
+          loading={loading}
         />
       ))}
     </ul>
