@@ -1,4 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { InputField } from "./components/InputField/InputField";
+import { TaskList } from "./components/Tasks/TaskList";
 
 type Task = {
   text: string;
@@ -11,17 +13,10 @@ export function App() {
   const [filterText, setFilterText] = useState<string>("");
 
   const addTask = () => {
-    const newTaskObj: Task = {
-      text: newTask,
-      completed: false,
-    };
-    setTasks([...tasks, newTaskObj]);
-    setNewTask("");
-  };
-
-  const removeTask = (index: number) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
+    if (newTask.trim()) {
+      setTasks([...tasks, { text: newTask, completed: false }]);
+      setNewTask("");
+    }
   };
 
   const editTask = (index: number, newText: string) => {
@@ -38,39 +33,35 @@ export function App() {
     setTasks(updatedTasks);
   };
 
+  const removeTask = (index: number) => {
+    const updatedTasks = tasks.filter((_, i) => i !== index);
+    setTasks(updatedTasks);
+  };
+
   return (
     <div>
       <h1>Lista de Tarefas</h1>
-
-      <input
-        type="text"
+      <InputField
         value={newTask}
         onChange={(e) => setNewTask(e.target.value)}
+        placeholder="Adicione uma nova tarefa"
       />
       <button onClick={addTask}>Adicionar</button>
 
-      <input
-        type="text"
-        placeholder="Filtrar por texto"
+      <InputField
         value={filterText}
         onChange={(e) => setFilterText(e.target.value)}
+        placeholder="Filtrar tarefas"
       />
 
-      <ul>
-        {tasks.map((task, index) => (
-          <li key={index}>
-            <input
-              type="text"
-              value={task.text}
-              onChange={(e) => editTask(index, e.target.value)}
-            />
-            <button onClick={() => toggleTaskCompletion(index)}>
-              {task.completed ? "Desmarcar" : "Concluir"}
-            </button>
-            <button onClick={() => removeTask(index)}>Remover</button>
-          </li>
-        ))}
-      </ul>
+      <TaskList
+        tasks={tasks.filter((task) =>
+          task.text.toLowerCase().includes(filterText.toLowerCase())
+        )}
+        onEdit={editTask}
+        onToggle={toggleTaskCompletion}
+        onRemove={removeTask}
+      />
     </div>
   );
 }
