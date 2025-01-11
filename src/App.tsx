@@ -1,19 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { filterTasks } from "./utils/filterTasks";
+import { markAllAsCompleted, deleteCompletedTasks } from "./utils/taskActions";
+import { Task } from "./types/Task";
 import { TaskList } from "./components/Tasks/TaskList";
 
-type Task = {
-  text: string;
-  completed: boolean;
-};
-
 export const App: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
   const [newTask, setNewTask] = useState<string>("");
   const [filterType, setFilterType] = useState<
     "all" | "completed" | "incomplete"
   >("all");
   const [filterText, setFilterText] = useState<string>("");
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   const addTask = () => {
     if (newTask.trim() === "") return;
@@ -38,6 +42,14 @@ export const App: React.FC = () => {
       i === index ? { ...task, completed: !task.completed } : task
     );
     setTasks(updatedTasks);
+  };
+
+  const handleMarkAllAsCompleted = () => {
+    setTasks(markAllAsCompleted(tasks));
+  };
+
+  const handleDeleteCompletedTasks = () => {
+    setTasks(deleteCompletedTasks(tasks));
   };
 
   const filteredTasks = filterTasks(tasks, filterType, filterText);
@@ -71,6 +83,16 @@ export const App: React.FC = () => {
           value={filterText}
           onChange={(e) => setFilterText(e.target.value)}
         />
+      </div>
+
+      <div>
+        <h2>Ações</h2>
+        <button onClick={handleMarkAllAsCompleted}>
+          Marcar todas como concluídas
+        </button>
+        <button onClick={handleDeleteCompletedTasks}>
+          Excluir todas concluídas
+        </button>
       </div>
 
       <TaskList
