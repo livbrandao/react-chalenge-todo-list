@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { TaskItem } from "./TaskItem";
 
 type Task = {
   text: string;
@@ -18,54 +19,17 @@ export const TaskList: React.FC<TaskListProps> = ({
   onRemove,
   onToggle,
 }) => {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editingText, setEditingText] = useState<string>("");
-
-  const startEditing = (index: number, text: string) => {
-    setEditingIndex(index);
-    setEditingText(text);
-  };
-
-  const saveEditing = () => {
-    if (editingIndex !== null) {
-      onEditTask(editingIndex, editingText);
-      setEditingIndex(null);
-      setEditingText("");
-    }
-  };
-
-  const cancelEditing = () => {
-    setEditingIndex(null);
-    setEditingText("");
-  };
-
   return (
-    <ul>
+    <ul className="mt-10">
       {tasks.map((task, index) => (
-        <li key={index}>
-          {editingIndex === index ? (
-            <div>
-              <input
-                type="text"
-                value={editingText}
-                onChange={(e) => setEditingText(e.target.value)}
-              />
-              <button onClick={saveEditing}>Salvar</button>
-              <button onClick={cancelEditing}>Cancelar</button>
-            </div>
-          ) : (
-            <div>
-              <span>{task.text}</span>
-              <button onClick={() => startEditing(index, task.text)}>
-                Editar
-              </button>
-              <button onClick={() => onRemove(index)}>Remover</button>
-              <button onClick={() => onToggle(index)}>
-                {task.completed ? "Desmarcar" : "Concluir"}
-              </button>
-            </div>
-          )}
-        </li>
+        <TaskItem
+          key={index}
+          task={task}
+          index={index}
+          onEditTask={onEditTask}
+          onRemove={onRemove}
+          onToggle={onToggle}
+        />
       ))}
     </ul>
   );

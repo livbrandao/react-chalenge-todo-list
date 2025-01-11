@@ -55,52 +55,84 @@ export const App: React.FC = () => {
   const filteredTasks = filterTasks(tasks, filterType, filterText);
 
   return (
-    <div>
-      <h1>Lista de Tarefas</h1>
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
+        <h1 className="text-2xl font-bold text-center mb-6 uppercase">
+          Lista de Tarefas
+        </h1>
 
-      <div>
-        <input
-          type="text"
-          placeholder="Digite uma nova tarefa"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-        />
-        <button onClick={addTask}>Adicionar Tarefa</button>
-      </div>
-
-      <div>
-        <h2>Filtros</h2>
-        <div>
-          <button onClick={() => setFilterType("all")}>Todas</button>
-          <button onClick={() => setFilterType("completed")}>Concluídas</button>
-          <button onClick={() => setFilterType("incomplete")}>
-            Não concluídas
+        <div className="mb-4 flex gap-2">
+          <input
+            type="text"
+            className="border rounded-lg w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Digite uma nova tarefa"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+          />
+          <button
+            className="w-1/2 bg-blue-500 text-white  rounded-lg hover:bg-blue-600"
+            onClick={addTask}
+          >
+            Adicionar Tarefa
           </button>
         </div>
-        <input
-          type="text"
-          placeholder="Filtrar por texto"
-          value={filterText}
-          onChange={(e) => setFilterText(e.target.value)}
-        />
-      </div>
 
-      <div>
-        <h2>Ações</h2>
-        <button onClick={handleMarkAllAsCompleted}>
-          Marcar todas como concluídas
-        </button>
-        <button onClick={handleDeleteCompletedTasks}>
-          Excluir todas concluídas
-        </button>
-      </div>
+        <div className="flex flex-col items-start  mb-2">
+          <div className="flex items-center w-full mb-1 gap-2">
+            <p className=" text-sm font-medium ">Filtrar por:</p>
 
-      <TaskList
-        tasks={filteredTasks}
-        onEditTask={editTask}
-        onRemove={removeTask}
-        onToggle={toggleTaskCompletion}
-      />
+            <button
+              className="px-4 py-1 text-sm bg-gray-200 rounded-lg hover:bg-gray-300"
+              onClick={() => setFilterType("all")}
+            >
+              Todas
+            </button>
+            <button
+              className="px-4 py-1 text-sm bg-gray-200 rounded-lg hover:bg-gray-300"
+              onClick={() => setFilterType("completed")}
+            >
+              Concluídas
+            </button>
+            <button
+              className="px-4 py-1 text-sm bg-gray-200 rounded-lg hover:bg-gray-300 "
+              onClick={() => setFilterType("incomplete")}
+            >
+              Não concluídas
+            </button>
+          </div>
+          <input
+            type="text"
+            className="border rounded-lg w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Filtrar por texto"
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+          />
+        </div>
+
+        <div className="">
+          <div className="mb-4 flex flex-row gap-4 justify-end w-full">
+            <button
+              className=" bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 "
+              onClick={handleMarkAllAsCompleted}
+            >
+              Marcar todas como concluídas
+            </button>
+            <button
+              className=" bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
+              onClick={handleDeleteCompletedTasks}
+            >
+              Excluir todas concluídas
+            </button>
+          </div>
+
+          <TaskList
+            tasks={filteredTasks}
+            onEditTask={editTask}
+            onRemove={removeTask}
+            onToggle={toggleTaskCompletion}
+          />
+        </div>
+      </div>
     </div>
   );
 };
