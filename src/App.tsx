@@ -1,12 +1,17 @@
 import { useState } from "react";
 
+type Task = {
+  text: string;
+  completed: boolean;
+};
+
 export function App() {
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState("");
-  const [filterText, setFilterText] = useState("");
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [newTask, setNewTask] = useState<string>("");
+  const [filterText, setFilterText] = useState<string>("");
 
   const addTask = () => {
-    const newTaskObj = {
+    const newTaskObj: Task = {
       text: newTask,
       completed: false,
     };
@@ -14,19 +19,19 @@ export function App() {
     setNewTask("");
   };
 
-  const removeTask = (index) => {
+  const removeTask = (index: number) => {
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
   };
 
-  const editTask = (index, newText) => {
+  const editTask = (index: number, newText: string) => {
     const updatedTasks = tasks.map((task, i) =>
       i === index ? { ...task, text: newText } : task
     );
     setTasks(updatedTasks);
   };
 
-  const toggleTaskCompletion = (index) => {
+  const toggleTaskCompletion = (index: number) => {
     const updatedTasks = tasks.map((task, i) =>
       i === index ? { ...task, completed: !task.completed } : task
     );
