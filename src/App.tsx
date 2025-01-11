@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { InputField } from "./components/InputField/InputField";
+import React, { useState } from "react";
+import { filterTasks } from "./utils/filterTasks";
 import { TaskList } from "./components/Tasks/TaskList";
 
 type Task = {
@@ -7,30 +7,29 @@ type Task = {
   completed: boolean;
 };
 
-export function App() {
-  const [tasks, setTasks] = useState<Task[]>(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
-
+export const App: React.FC = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState<string>("");
+  const [filterType, setFilterType] = useState<
+    "all" | "completed" | "incomplete"
+  >("all");
   const [filterText, setFilterText] = useState<string>("");
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
   const addTask = () => {
-    if (newTask.trim()) {
-      setTasks([...tasks, { text: newTask, completed: false }]);
-      setNewTask("");
-    }
+    if (newTask.trim() === "") return;
+    setTasks([...tasks, { text: newTask.trim(), completed: false }]);
+    setNewTask("");
   };
 
   const editTask = (index: number, newText: string) => {
     const updatedTasks = tasks.map((task, i) =>
       i === index ? { ...task, text: newText } : task
     );
+    setTasks(updatedTasks);
+  };
+
+  const removeTask = (index: number) => {
+    const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
   };
 
@@ -41,33 +40,45 @@ export function App() {
     setTasks(updatedTasks);
   };
 
-  const removeTask = (index: number) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
-  };
+  const filteredTasks = filterTasks(tasks, filterType, filterText);
 
   return (
     <div>
       <h1>Lista de Tarefas</h1>
-      <InputField
-        value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
-        placeholder="Adicione uma nova tarefa"
-      />
-      <button onClick={addTask}>Adicionar</button>
 
-      <InputField
-        value={filterText}
-        onChange={(e) => setFilterText(e.target.value)}
-        placeholder="Filtrar tarefas"
-      />
+      <div>
+        <input
+          type="text"
+          placeholder="Digite uma nova tarefa"
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
+        />
+        <button onClick={addTask}>Adicionar Tarefa</button>
+      </div>
+
+      <div>
+        <h2>Filtros</h2>
+        <div>
+          <button onClick={() => setFilterType("all")}>Todas</button>
+          <button onClick={() => setFilterType("completed")}>Concluídas</button>
+          <button onClick={() => setFilterType("incomplete")}>
+            Não concluídas
+          </button>
+        </div>
+        <input
+          type="text"
+          placeholder="Filtrar por texto"
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+        />
+      </div>
 
       <TaskList
-        tasks={tasks}
+        tasks={filteredTasks}
         onEditTask={editTask}
         onRemove={removeTask}
         onToggle={toggleTaskCompletion}
       />
     </div>
   );
-}
+};
