@@ -89,7 +89,11 @@ export const TaskItem: React.FC<TaskItemProps> = ({
               Remover
             </button>
             <button
-              className="bg-emerald-950 text-white px-4 py-1 rounded-lg hover:bg-emerald-800 text-sm"
+              className={`${
+                task.completed
+                  ? "bg-teal-500 hover:bg-teal-300"
+                  : "bg-emerald-950 hover:bg-emerald-800"
+              } text-white px-4 py-1 rounded-lg text-sm`}
               onClick={() => onToggle(index)}
             >
               {task.completed ? "Desmarcar" : "Concluir"}
