@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { filterTasks } from "./utils/filterTasks";
 import { markAllAsCompleted, deleteCompletedTasks } from "./utils/taskActions";
 import { Task } from "./types/Task";
-import { TaskList } from "./components/Tasks/TaskList";
 import { Filter } from "./components/Actions/Filter";
 import { ActionButtons } from "./components/Actions/ActionButtons";
-import { AddTask } from "./components/Tasks/Add.Task";
+import AddTask from "./components/Tasks/AddTask";
+
+const TaskList = React.lazy(() => import("./components/Tasks/TaskList"));
 
 export const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(() => {
@@ -17,22 +18,29 @@ export const App: React.FC = () => {
     "all" | "completed" | "incomplete"
   >("all");
   const [filterText, setFilterText] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTask = () => {
+  const addTask = async () => {
     if (newTask.trim() === "") return;
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
     setTasks([...tasks, { text: newTask.trim(), completed: false }]);
     setNewTask("");
+    setLoading(false);
   };
 
-  const editTask = (index: number, newText: string) => {
+  const editTask = async (index: number, newText: string) => {
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
     const updatedTasks = tasks.map((task, i) =>
       i === index ? { ...task, text: newText } : task
     );
     setTasks(updatedTasks);
+    setLoading(false);
   };
 
   const removeTask = (index: number) => {
@@ -78,12 +86,14 @@ export const App: React.FC = () => {
           onDeleteCompletedTasks={handleDeleteCompletedTasks}
         />
 
-        <TaskList
-          tasks={filteredTasks}
-          onEditTask={editTask}
-          onRemove={removeTask}
-          onToggle={toggleTaskCompletion}
-        />
+        <React.Suspense fallback={<div>Loading tasks...</div>}>
+          <TaskList
+            tasks={filteredTasks}
+            onEditTask={editTask}
+            onRemove={removeTask}
+            onToggle={toggleTaskCompletion}
+          />
+        </React.Suspense>
       </div>
     </div>
   );

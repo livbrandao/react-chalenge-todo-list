@@ -1,5 +1,3 @@
-// TaskItem.tsx
-
 import React, { useState } from "react";
 
 type Task = {
@@ -13,6 +11,7 @@ interface TaskItemProps {
   onEditTask: (index: number, newText: string) => void;
   onRemove: (index: number) => void;
   onToggle: (index: number) => void;
+  loading: boolean;
 }
 
 export const TaskItem: React.FC<TaskItemProps> = ({
@@ -21,6 +20,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
   onEditTask,
   onRemove,
   onToggle,
+  loading,
 }) => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingText, setEditingText] = useState<string>("");
@@ -30,8 +30,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({
     setEditingText(text);
   };
 
-  const saveEditing = () => {
+  const saveEditing = async () => {
     if (editingIndex !== null) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
       onEditTask(editingIndex, editingText);
       setEditingIndex(null);
       setEditingText("");
@@ -54,10 +55,13 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             onChange={(e) => setEditingText(e.target.value)}
           />
           <button
-            className="bg-green-500 text-white px-4 py-1 rounded-lg hover:bg-green-600 text-sm mr-2"
+            className={`bg-green-500 text-white px-4 py-1 rounded-lg hover:bg-green-600 text-sm mr-2 ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             onClick={saveEditing}
+            disabled={loading}
           >
-            Salvar
+            {loading ? "Carregando..." : "Salvar"}
           </button>
           <button
             className="bg-blue-500 text-white px-4 py-1 rounded-lg hover:bg-blue-600 text-sm"

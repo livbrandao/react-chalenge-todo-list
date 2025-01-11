@@ -4,12 +4,14 @@ interface AddTaskProps {
   newTask: string;
   setNewTask: React.Dispatch<React.SetStateAction<string>>;
   addTask: () => void;
+  loading: boolean;
 }
 
-export const AddTask: React.FC<AddTaskProps> = ({
+const AddTask: React.FC<AddTaskProps> = ({
   newTask,
   setNewTask,
   addTask,
+  loading,
 }) => {
   return (
     <div className="mb-4 flex gap-2">
@@ -21,11 +23,16 @@ export const AddTask: React.FC<AddTaskProps> = ({
         onChange={(e) => setNewTask(e.target.value)}
       />
       <button
-        className="w-1/2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        className={`w-1/2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${
+          loading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
         onClick={addTask}
+        disabled={loading}
       >
-        Adicionar Tarefa
+        {loading ? "Carregando..." : "Adicionar Tarefa"}
       </button>
     </div>
   );
 };
+
+export default AddTask;

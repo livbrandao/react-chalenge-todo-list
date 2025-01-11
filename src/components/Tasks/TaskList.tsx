@@ -13,7 +13,7 @@ interface TaskListProps {
   onToggle: (index: number) => void;
 }
 
-export const TaskList: React.FC<TaskListProps> = ({
+const TaskList: React.FC<TaskListProps> = ({
   tasks,
   onEditTask,
   onRemove,
@@ -34,3 +34,5 @@ export const TaskList: React.FC<TaskListProps> = ({
     </ul>
   );
 };
+
+export default TaskList;
