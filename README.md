@@ -1,4 +1,4 @@
-Lista de Tarefas 📝 (To-Do List)
+## **Lista de Tarefas 📝 (To-Do List)**
 
 O projeto é uma aplicação web desenvolvida para auxiliar usuários na organização de suas atividades diárias. Construída com React, TypeScript e Tailwind CSS, a aplicação oferece uma interface intuitiva e responsiva para o gerenciamento de tarefas.
 
