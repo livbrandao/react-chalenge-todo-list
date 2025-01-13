@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { filterTasks } from "./utils/filterTasks";
 import { markAllAsCompleted, deleteAllTasks } from "./utils/taskActions";
 import { Task } from "./types/Task";
