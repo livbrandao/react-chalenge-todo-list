@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { filterTasks } from "./utils/filterTasks";
-import { markAllAsCompleted, deleteCompletedTasks } from "./utils/taskActions";
+import { markAllAsCompleted, deleteAllTasks } from "./utils/taskActions";
 import { Task } from "./types/Task";
 import { Filter } from "./components/Actions/Filter";
 import { ActionButtons } from "./components/Actions/ActionButtons";
@@ -62,7 +62,7 @@ export const App: React.FC = () => {
   };
 
   const handleDeleteCompletedTasks = () => {
-    setTasks(deleteCompletedTasks(tasks));
+    setTasks(deleteAllTasks(tasks));
   };
 
   const filteredTasks = filterTasks(tasks, filterType, filterText);
